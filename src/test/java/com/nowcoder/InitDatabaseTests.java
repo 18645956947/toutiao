@@ -1,7 +1,8 @@
 package com.nowcoder;
 
 
-import com.nowcoder.toutiao.dao.UserDao;
+import com.nowcoder.dao.UserDAO;
+import com.nowcoder.model.News;
 import com.nowcoder.model.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
 import java.util.Random;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,7 +22,7 @@ import java.util.Random;
 public class InitDatabaseTests {
 
     @Autowired
-    private UserDao userDao;
+    private UserDAO userDao;
 
     @Test
     public void initDate(){
@@ -33,6 +35,12 @@ public class InitDatabaseTests {
             user.setPassword("");
             user.setSalt("");
             userDao.addUser(user);
+
+            News news = new News();
+            news.setCommentCount(i);
+            Date date = new Date();
+            date.setTime(date.getTime() + 1000*3600*5*i);
+
 
             user.setPassword("nowcoder");
             userDao.updatePassword(user);
