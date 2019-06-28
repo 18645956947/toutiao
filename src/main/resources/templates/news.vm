@@ -1,0 +1,25 @@
+<html>
+<body>
+<pre>
+Hello VM.
+
+## 你看不到我
+$!{value1}
+#foreach ($color in $colors)
+Color $!{foreach.index}/$!{foreach.count}: $!{color}
+#end
+
+    #foreach($kv in $map.entrySet())
+        Number $!{foreach.index}/$!{foreach.count}: $!{$kv.key} $!{$kv.value}
+    #end
+
+$!{user.name}
+$!{user.getName()}
+
+#set($title = "nnowcoder")
+Include: #include("header.vm")
+Parse:#parse("header.vm")
+
+</pre>
+</body>
+</html>
