@@ -1,6 +1,7 @@
 package com.nowcoder;
 
 
+import com.nowcoder.dao.NewsDAO;
 import com.nowcoder.dao.UserDAO;
 import com.nowcoder.model.News;
 import com.nowcoder.model.User;
@@ -23,6 +24,9 @@ public class InitDatabaseTests {
 
     @Autowired
     private UserDAO userDao;
+    @Autowired
+    private NewsDAO newsDAO;
+
 
     @Test
     public void initDate(){
@@ -40,7 +44,13 @@ public class InitDatabaseTests {
             news.setCommentCount(i);
             Date date = new Date();
             date.setTime(date.getTime() + 1000*3600*5*i);
-
+            news.setCreatedDate(date);
+            news.setImage(String.format("http://images.nowcoder.com/head/%dm.png", random.nextInt(1000)));
+            news.setLikeCount(i+1);
+            news.setUserId(i+1);
+            news.setTitle(String.format("TITLE{%d}", i));
+            news.setLink(String.format("http://www.nowcoder.com/%d.html", i));
+            newsDAO.addNews(news);
 
             user.setPassword("nowcoder");
             userDao.updatePassword(user);

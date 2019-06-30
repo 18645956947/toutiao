@@ -1,6 +1,6 @@
 package com.nowcoder.service;
 
-import com.nowcoder.toutiao.dao.UserDao;
+import com.nowcoder.dao.UserDAO;
 import com.nowcoder.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    private UserDao userDao;
+    private UserDAO userDao;
 
     public User getUser(int id){
         return userDao.selectById(id);
