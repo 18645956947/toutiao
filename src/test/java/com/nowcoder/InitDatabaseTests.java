@@ -23,7 +23,7 @@ import java.util.Random;
 public class InitDatabaseTests {
 
     @Autowired
-    private UserDAO userDao;
+    private UserDAO userDAO;
     @Autowired
     private NewsDAO newsDAO;
 
@@ -38,7 +38,7 @@ public class InitDatabaseTests {
             user.setName(String.format("USER%d", i));
             user.setPassword("");
             user.setSalt("");
-            userDao.addUser(user);
+            userDAO.addUser(user);
 
             News news = new News();
             news.setCommentCount(i);
@@ -53,12 +53,12 @@ public class InitDatabaseTests {
             newsDAO.addNews(news);
 
             user.setPassword("nowcoder");
-            userDao.updatePassword(user);
+            userDAO.updatePassword(user);
 
         }
-        Assert.assertEquals("nowcoder", userDao.selectById(1).getPassword());
-        userDao.deleById(1);
-        Assert.assertNull(userDao.selectById(1));
+        Assert.assertEquals("nowcoder", userDAO.selectById(1).getPassword());
+        userDAO.deleById(1);
+        Assert.assertNull(userDAO.selectById(1));
 
     }
 

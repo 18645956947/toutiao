@@ -30,6 +30,8 @@ public class LoginController {
                       @RequestParam("password") String password,
                       @RequestParam(value = "rember", defaultValue = "0") int rememberme){
 
+
+
         return "home";
     }
 
