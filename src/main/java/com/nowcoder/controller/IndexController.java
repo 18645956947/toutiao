@@ -27,13 +27,13 @@ public class IndexController {
     @Autowired
     ToutiaoService toutiaoService;
 
-    @RequestMapping(path = {"/", "/index"})
+    /*@RequestMapping(path = {"/", "/index"})
     @ResponseBody
     public String index(HttpSession session){
 
         logger.info("visit index");
         return "hello" + session.getAttribute("msg") + toutiaoService.say();
-    }
+    }*/
 
     @RequestMapping(value = {"/profile/{groupId}/{userId}"})
     @ResponseBody
