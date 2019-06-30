@@ -25,7 +25,6 @@ public class LoginController {
     UserService userService;
 
 
-
     @RequestMapping(path = {"/reg/"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String reg(Model model, @RequestParam("username") String username,
                       @RequestParam("password") String password,
