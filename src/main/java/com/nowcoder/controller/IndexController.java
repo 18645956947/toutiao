@@ -137,4 +137,10 @@ public class IndexController {
         return "error:" + e.getMessage();
     }
 
+    @RequestMapping(value = "/rw/", produces="text/plain;charset=UTF-8")
+    @ResponseBody
+    public String respomse1(){
+        return "你好是阿瑟东sss";
+    }
+
 }
