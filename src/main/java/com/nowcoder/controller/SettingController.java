@@ -15,4 +15,5 @@ public class SettingController {
     public String setting() {
         return "Setting:OK";
     }
+
 }
