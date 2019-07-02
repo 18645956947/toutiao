@@ -1,8 +1,10 @@
 package com.nowcoder;
 
 
+import com.nowcoder.dao.LoginTicketDAO;
 import com.nowcoder.dao.NewsDAO;
 import com.nowcoder.dao.UserDAO;
+import com.nowcoder.model.LoginTicket;
 import com.nowcoder.model.News;
 import com.nowcoder.model.User;
 import org.junit.Assert;
@@ -24,8 +26,12 @@ public class InitDatabaseTests {
 
     @Autowired
     private UserDAO userDAO;
+
     @Autowired
     private NewsDAO newsDAO;
+
+    @Autowired
+    private LoginTicketDAO loginTicketDAO;
 
 
     @Test
@@ -55,10 +61,24 @@ public class InitDatabaseTests {
             user.setPassword("nowcoder");
             userDAO.updatePassword(user);
 
+
+            LoginTicket ticket = new LoginTicket();
+            ticket.setExpired(date);
+            ticket.setUserId(i+1);
+            ticket.setStatus(0);
+            ticket.setTicket(String.format("TICKET%d", i+1));
+            loginTicketDAO.addTicket(ticket);
+
+            loginTicketDAO.updateStatus(ticket.getTicket(), 2);
+
+
         }
         Assert.assertEquals("nowcoder", userDAO.selectById(1).getPassword());
         userDAO.deleById(1);
         Assert.assertNull(userDAO.selectById(1));
+
+        Assert.assertEquals(1, loginTicketDAO.selectByTicket("TICKET1").getUserId());
+        Assert.assertEquals(2, loginTicketDAO.selectByTicket("TICKET1").getStatus());
 
     }
 

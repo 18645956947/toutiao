@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.jws.WebParam;
 import javax.lang.model.element.NestingKind;
@@ -47,8 +48,10 @@ public class HomeController {
     }
 
     @RequestMapping(path = {"/user/{userId}/"}, method = {RequestMethod.GET, RequestMethod.POST})
-    public String index(Model model, @PathVariable("userId") int usereId){
+    public String userIndex(Model model, @PathVariable("userId") int usereId,
+                            @RequestParam("pop") int pop){
         model.addAttribute("vos", getNews(usereId, 0, 10));
+        model.addAttribute("pop", pop);
         return "home";
     }
 
