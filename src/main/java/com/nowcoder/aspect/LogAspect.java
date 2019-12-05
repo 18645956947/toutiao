@@ -14,19 +14,17 @@ import org.springframework.stereotype.Component;
 public class LogAspect {
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
-    @Before("execution(* com.nowcoder.toutiao.controller.*Controller.*(..))")
-    public void beforeMethod(JoinPoint joinPoint){
-        StrBuilder sb = new StrBuilder();
-        for (Object arg:joinPoint.getArgs()) {
-            sb.append("arg:"+arg.toString()+"|");
+    @Before("execution(* com.nowcoder.controller.*Controller.*(..))")
+    public void beforeMethod(JoinPoint joinPoint) {
+        StringBuilder sb = new StringBuilder();
+        for (Object arg : joinPoint.getArgs()) {
+            sb.append("arg:" + arg.toString() + "|");
         }
-        logger.info("before method"+sb.toString());
+        logger.info("before method: " + sb.toString());
     }
 
-    @After("execution(* com.nowcoder.toutiao.controller.*Controller.*(..))")
-    public void afterMethod(JoinPoint joinPoint){
-        logger.info("after method");
+    @After("execution(* com.nowcoder.controller.IndexController.*(..))")
+    public void afterMethod(JoinPoint joinPoint) {
+        logger.info("after method: ");
     }
-
-
 }

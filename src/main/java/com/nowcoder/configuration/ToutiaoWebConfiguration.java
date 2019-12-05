@@ -12,9 +12,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Component
 public class ToutiaoWebConfiguration extends WebMvcConfigurerAdapter {
-
     @Autowired
     PassportInterceptor passportInterceptor;
+
     @Autowired
     LoginRequiredInterceptor loginRequiredInterceptor;
 

@@ -19,64 +19,59 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.lang.String;
 
-@Controller
+//@Controller
 public class IndexController {
-
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     @Autowired
-    ToutiaoService toutiaoService;
+    private ToutiaoService toutiaoService;
 
-    /*@RequestMapping(path = {"/", "/index"})
+    @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String index(HttpSession session){
-
-        logger.info("visit index");
-        return "hello" + session.getAttribute("msg") + toutiaoService.say();
-    }*/
+    public String index(HttpSession session) {
+        logger.info("Visit Index");
+        return "Hello NowCoder," + session.getAttribute("msg")
+                + "<br> Say:" + toutiaoService.say();
+    }
 
     @RequestMapping(value = {"/profile/{groupId}/{userId}"})
     @ResponseBody
-        public String profile(@PathVariable("groupId") String groupId,
+    public String profile(@PathVariable("groupId") String groupId,
                           @PathVariable("userId") int userId,
                           @RequestParam(value = "type", defaultValue = "1") int type,
                           @RequestParam(value = "key", defaultValue = "nowcoder") String key) {
-
         return String.format("GID{%s},UID{%d},TYPE{%d},KEY{%s}", groupId, userId, type, key);
     }
 
     @RequestMapping(value = {"/vm"})
     public String news(Model model) {
         model.addAttribute("value1", "vv1");
-        java.lang.String[] str = {"red", "green", "yellow"};
-        List<java.lang.String> colors = Arrays.asList(str);
-        Map<String, String> map = new HashMap<>();
-        for (int i = 0; i < 4; i++) {
-            map.put(String.valueOf(i), String.valueOf(i*i));
+        List<String> colors = Arrays.asList(new String[]{"RED", "GREEN", "BLUE"});
 
+        Map<String, String> map = new HashMap<String, String>();
+        for (int i = 0; i < 4; ++i) {
+            map.put(String.valueOf(i), String.valueOf(i * i));
         }
+
         model.addAttribute("colors", colors);
         model.addAttribute("map", map);
-        /*for( Map.Entry<String, String> entry : map.entrySet()){
-            System.out.println("key:"+entry.getKey()+"value:"+entry.getValue());
-        }*/
-
-        model.addAttribute("user", new User("JIM"));
+        model.addAttribute("user", new User("Jim"));
 
         return "news";
     }
 
-    @RequestMapping("request")
+    @RequestMapping(value = {"/request"})
     @ResponseBody
-    public String requet(HttpServletRequest request,
-                         HttpServletResponse response,
-                         HttpSession session){
-        StrBuilder sb = new StrBuilder();
-        Enumeration<String> headerName = request.getHeaderNames();
-        while (headerName.hasMoreElements()){
-            String name = headerName.nextElement();
-            sb.append(name+":"+request.getHeader(name)+"<br>");
+    public String request(HttpServletRequest request,
+                          HttpServletResponse response,
+                          HttpSession session) {
+        StringBuilder sb = new StringBuilder();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            sb.append(name + ":" + request.getHeader(name) + "<br>");
         }
+
         for (Cookie cookie : request.getCookies()) {
             sb.append("Cookie:");
             sb.append(cookie.getName());
@@ -84,57 +79,52 @@ public class IndexController {
             sb.append(cookie.getValue());
             sb.append("<br>");
         }
-        sb.append("getMethod,"+request.getMethod()+"<br>");
-        sb.append("getPathInfo,"+request.getPathInfo()+"<br>");
-        sb.append("getQueryString,"+request.getQueryString()+"<br>");
-        sb.append("getRequestURI,"+request.getRequestURI()+"<br>");
+
+        sb.append("getMethod:" + request.getMethod() + "<br>");
+        sb.append("getPathInfo:" + request.getPathInfo() + "<br>");
+        sb.append("getQueryString:" + request.getQueryString() + "<br>");
+        sb.append("getRequestURI:" + request.getRequestURI() + "<br>");
+
         return sb.toString();
 
     }
 
-    @RequestMapping("response")
+    @RequestMapping(value = {"/response"})
     @ResponseBody
-    public String respomse(@CookieValue(value = "nowcoderid", defaultValue = "a") String nowcoderId,
+    public String response(@CookieValue(value = "nowcoderid", defaultValue = "a") String nowcoderId,
                            @RequestParam(value = "key", defaultValue = "key") String key,
-                               @RequestParam(value = "value", defaultValue = "value") String value,
-                           HttpServletResponse response){
-
+                           @RequestParam(value = "value", defaultValue = "value") String value,
+                           HttpServletResponse response) {
         response.addCookie(new Cookie(key, value));
         response.addHeader(key, value);
-        return "NowcoderId From Cookie:" + nowcoderId;
+        return "NowCoderId From Cookie:" + nowcoderId;
     }
 
-    //跳转
     @RequestMapping("/redirect/{code}")
-    public RedirectView redirect(@PathVariable("code") int code){
+    public String redirect(@PathVariable("code") int code,
+                           HttpSession session) {
+        /*
         RedirectView red = new RedirectView("/", true);
-        if(code == 301){
+        if (code == 301) {
             red.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         }
-        return red;
-    }
-    @RequestMapping("/redirect1/{code}")
-    public String redirect(@PathVariable("code") int code,
-                           HttpSession session){
-
-        session.setAttribute("msg", "JUMP from ");
+        return red;*/
+        session.setAttribute("msg", "Jump from redirect.");
         return "redirect:/";
     }
 
     @RequestMapping("/admin")
     @ResponseBody
-    public String admin(@RequestParam(value = "key", required = false)String key){
-        if("admin".equals(key)){
+    public String admin(@RequestParam(value = "key", required = false) String key) {
+        if ("admin".equals(key)) {
             return "hello admin";
         }
-        throw new IllegalArgumentException("key error");
+        throw new IllegalArgumentException("Key 错误");
     }
 
-    //统一错误处理
-    @ExceptionHandler
+    @ExceptionHandler()
     @ResponseBody
-    public String error(Exception e){
+    public String error(Exception e) {
         return "error:" + e.getMessage();
     }
-
 }

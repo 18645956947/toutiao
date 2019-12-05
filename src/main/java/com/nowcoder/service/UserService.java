@@ -48,9 +48,9 @@ public class UserService {
         user.setPassword(ToutiaoUtil.MD5(password+user.getSalt()));
         userDAO.addUser(user);
 
+        //登录
         String ticket = addLoginTicket(user.getId());
         map.put("ticket", ticket);
-        //登录
 
         return map;
     }
@@ -75,7 +75,7 @@ public class UserService {
         User user = userDAO.selectByName(username);
         if(user == null){
             map.put("msgname", "用户名不存在");
-            System.out.println(map.entrySet());
+            return map;
         }
 
 
