@@ -1,11 +1,12 @@
 package com.nowcoder.controller;
 
-import com.nowcoder.model.HostHolder;
-import com.nowcoder.model.News;
+import com.nowcoder.model.*;
+import com.nowcoder.service.CommentService;
 import com.nowcoder.service.NewsService;
 import com.nowcoder.service.QiniuService;
 import com.nowcoder.service.UserService;
 import com.nowcoder.util.ToutiaoUtil;
+import org.apache.velocity.util.ArrayListWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class NewsController {
@@ -36,15 +39,53 @@ public class NewsController {
     @Autowired
     HostHolder hostHolder;
 
+    @Autowired
+    CommentService commentService;
+
     @RequestMapping(path = {"/news/{newsId}"}, method = {RequestMethod.GET})
     public String newsDetail(@PathVariable("newsId") int newsId, Model model){
+
+        //过滤comment 还没有做
         News news = newsService.getById(newsId);
         if(news != null){
-            //
+            // 评论
+            List<Comment> comments = commentService.getCommentsByEntity(news.getId(), EntityType.ENTITY_NEWS);
+            List<ViewObject> commentVOs = new ArrayList();
+            for (Comment comment:comments) {
+                ViewObject vo = new ViewObject();
+                vo.set("comment", comment);
+                vo.set("user", userService.getUser(comment.getUserId()));
+                commentVOs.add(vo);
+            }
+            model.addAttribute("comments", commentVOs);
         }
         model.addAttribute("news", news);
         model.addAttribute("owner", userService.getUser(news.getUserId()));
         return "detail";
+    }
+
+    @RequestMapping(path = {"/addComment"}, method = {RequestMethod.POST})
+    public String addComment(@RequestParam("newsId") int newsId,
+                             @RequestParam("content") String content){
+        try{
+            Comment comment = new Comment();
+            comment.setUserId(hostHolder.getUser().getId());
+            comment.setContent(content);
+            comment.setEntityId(newsId);
+            comment.setEntityType(EntityType.ENTITY_NEWS);
+            comment.setCreatedDate(new Date());
+            comment.setStatus(0);
+            commentService.addComment(comment);
+            //更新news里的评论数量
+            int count = commentService.getCommentCount(comment.getEntityId(), comment.getEntityType());
+            newsService.updateCommentCount(comment.getEntityId(), count);
+            //怎么异步化
+
+
+        }catch (Exception e){
+            logger.error("增加评论失败" + e.getMessage());
+        }
+        return "redirect:/news/" + String.valueOf(newsId);
     }
 
     @RequestMapping(path = {"/user/addNews"}, method = {RequestMethod.POST})
@@ -101,4 +142,5 @@ public class NewsController {
             return ToutiaoUtil.getJSONString(1, "上传失败");
         }
     }
+
 }
