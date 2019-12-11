@@ -3,7 +3,6 @@ package com.nowcoder.model;
 import java.util.Date;
 
 public class Message {
-
     private int id;
     private int fromId;
     private int toId;
@@ -12,6 +11,10 @@ public class Message {
     private int hasRead;
     private String conversationId;
 
+
+    public void setConversationId(String conversationId){
+        this.conversationId = conversationId;
+    }
     public int getId() {
         return id;
     }
@@ -61,10 +64,9 @@ public class Message {
     }
 
     public String getConversationId() {
-        return conversationId;
-    }
-
-    public void setConversationId(String conversationId) {
-        this.conversationId = conversationId;
+        if (fromId < toId) {
+            return String.format("%d_%d", fromId, toId);
+        }
+        return String.format("%d_%d", toId, fromId);
     }
 }

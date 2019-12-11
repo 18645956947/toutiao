@@ -1,9 +1,13 @@
 package com.nowcoder.service;
 
+import com.nowcoder.dao.CommentDAO;
+import com.nowcoder.model.Comment;
 import com.nowcoder.util.JedisAdapter;
 import com.nowcoder.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LikeService {
@@ -26,7 +30,6 @@ public class LikeService {
         // 从反对里删除
         String disLikeKey = RedisKeyUtil.getDisLikeKey(entityId, entityType);
         jedisAdapter.srem(disLikeKey, String.valueOf(userId));
-
         return jedisAdapter.scard(likeKey);
     }
 
@@ -37,7 +40,6 @@ public class LikeService {
         // 从喜欢里删除
         String likeKey = RedisKeyUtil.getLikeKey(entityId, entityType);
         jedisAdapter.srem(likeKey, String.valueOf(userId));
-
         return jedisAdapter.scard(likeKey);
     }
 }

@@ -11,10 +11,8 @@ import java.util.List;
 
 @Service
 public class CommentService {
-    private static final Logger logger = LoggerFactory.getLogger(QiniuService.class);
-
     @Autowired
-    CommentDAO commentDAO;
+    private CommentDAO commentDAO;
 
     public List<Comment> getCommentsByEntity(int entityId, int entityType) {
         return commentDAO.selectByEntity(entityId, entityType);
@@ -28,4 +26,7 @@ public class CommentService {
         return commentDAO.getCommentCount(entityId, entityType);
     }
 
+    public void deleteComment(int entityId, int entityType) {
+        commentDAO.updateStatus(entityId, entityType, 1);
+    }
 }

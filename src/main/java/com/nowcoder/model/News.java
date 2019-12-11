@@ -85,4 +85,3 @@ public class News {
         this.userId = userId;
     }
 }
-
