@@ -92,8 +92,10 @@ public class MessageController {
             msg.setFromId(fromId);
             msg.setToId(toId);
             msg.setCreatedDate(new Date());
-            msg.setConversationId(fromId < toId ? String.format("%d_%d", fromId, toId) : String.format("%d_%d", toId, fromId));
+            //msg.setConversationId(fromId < toId ? String.format("%d_%d", fromId, toId) : String.format("%d_%d", toId, fromId));
+            System.out.println("3333");
             messageService.addMessage(msg);
+            System.out.println("111");
             return ToutiaoUtil.getJSONString(msg.getId());
         } catch (Exception e) {
             System.out.println("增加评论失败");

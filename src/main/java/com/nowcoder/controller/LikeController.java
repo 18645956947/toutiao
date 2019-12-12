@@ -40,10 +40,13 @@ public class LikeController {
         long likeCount = likeService.like(hostHolder.getUser().getId(), EntityType.ENTITY_NEWS, newsId);
         // 更新喜欢数
         News news = newsService.getById(newsId);
+        System.out.println("11111");
         newsService.updateLikeCount(newsId, (int) likeCount);
         eventProducer.fireEvent(new EventModel(EventType.LIKE)
                 .setEntityOwnerId(news.getUserId())
                 .setActorId(hostHolder.getUser().getId()).setEntityId(newsId));
+
+        System.out.println("22222");
         return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
     }
 
